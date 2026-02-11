@@ -1,27 +1,27 @@
 # AIR (Project Radio-AI)
 
-[cite_start]Radio-AI is an audio streaming platform that transforms standard music playlists into personalized, dynamic radio shows[cite: 1369]. [cite_start]By leveraging Large Language Models (LLMs) for script generation and a Retrieval-Augmented Generation (RAG) pipeline for fact-checking, the system creates an AI speaker that introduces tracks, narrates cultural trivia, and interacts with the user in real-time[cite: 1370].
+Radio-AI is an audio streaming platform that transforms standard music playlists into personalized, dynamic radio shows. By leveraging Large Language Models (LLMs) for script generation and a Retrieval-Augmented Generation (RAG) pipeline for fact-checking, the system creates an AI speaker that introduces tracks, narrates cultural trivia, and interacts with the user in real-time.
 
-[cite_start]The platform operates as a "smart remote control" for existing streaming services (Spotify, Apple Music), synchronizing locally played music with server-side generated AI voice chunks[cite: 1374].
+The platform operates as a "smart remote control" for existing streaming services (Spotify, Apple Music), synchronizing locally played music with server-side generated AI voice chunks.
 
 ## Repository Structure
 
 This project follows a monorepo structure to unify the mobile application, backend services, and AI engines.
 
-* **apps/mobile**: React Native (TypeScript) application for iOS and Android. [cite_start]Handles the dual-audio playback logic (Music SDK + TTS Player)[cite: 729].
-* **apps/api-gateway**: Node.js (NestJS) backend. [cite_start]Manages user sessions, authentication, WebSocket connections for Radio Rooms, and API routing[cite: 711].
-* **apps/ai-engine**: Python (FastAPI). [cite_start]The core logic for Prompt Interpretation, Intent Extraction, RAG Fact-Checking, and interfacing with LLM/TTS providers[cite: 712, 714].
+* **apps/mobile**: React Native (TypeScript) application for iOS and Android. Handles the dual-audio playback logic (Music SDK + TTS Player).
+* **apps/api-gateway**: Node.js (NestJS) backend. Manages user sessions, authentication, WebSocket connections for Radio Rooms, and API routing.
+* **apps/ai-engine**: Python (FastAPI). The core logic for Prompt Interpretation, Intent Extraction, RAG Fact-Checking, and interfacing with LLM/TTS providers.
 * **docs**: Architectural documentation and project specifications.
 
 ## Key Features
 
-* [cite_start]**Hybrid Playback**: Combines third-party music streaming (Spotify/Apple Music) with high-fidelity AI speech[cite: 1374].
+* **Hybrid Playback**: Combines third-party music streaming (Spotify/Apple Music) with high-fidelity AI speech.
 * **Two Listening Modes**:
-    * [cite_start]*Mode A (User Playlist)*: Generates a show based on a pre-existing user playlist[cite: 1371].
-    * [cite_start]*Mode B (AI Playlist)*: Generates the music selection based on a user prompt and mood analysis[cite: 1371].
-* [cite_start]**Fact-Checking Engine**: A RAG pipeline ensures all cultural and historical anecdotes narrated by the AI are verified against trusted sources[cite: 1370].
-* [cite_start]**Radio Rooms**: WebSocket-based synchronized listening rooms allowing multiple users to experience the same show simultaneously with low-latency sync[cite: 1372].
-* [cite_start]**Radio Ads Manager**: A thematic advertising system that targets moods and atmospheres rather than user demographics[cite: 1373].
+    * *Mode A (User Playlist)*: Generates a show based on a pre-existing user playlist.
+    * *Mode B (AI Playlist)*: Generates the music selection based on a user prompt and mood analysis.
+* **Fact-Checking Engine**: A RAG pipeline ensures all cultural and historical anecdotes narrated by the AI are verified against trusted sources.
+* **Radio Rooms**: WebSocket-based synchronized listening rooms allowing multiple users to experience the same show simultaneously with low-latency sync.
+* **Radio Ads Manager**: A thematic advertising system that targets moods and atmospheres rather than user demographics.
 
 ## Documentation
 
