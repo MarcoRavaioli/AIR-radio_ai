@@ -1,0 +1,310 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{enumitem}
+\usepackage{amsmath}
+
+\title{\textbf{Proposta sviluppo modulo AI} \\ \Large Radio generata da prompt}
+\author{Gabriele Rubboli Petroselli}
+\date{10/03/2026}
+
+\begin{document}
+
+\maketitle
+\vspace{1.5cm}
+
+\section{Obiettivo del modulo AI}
+
+Il modulo AI ha lo scopo di generare automaticamente una trasmissione radio a partire da un prompt testuale dell'utente.
+
+\paragraph{Input esempio:}
+``Musica chill per studiare la sera''
+
+\paragraph{Output del sistema:}
+\begin{enumerate}
+    \item Scaletta di canzoni coerente con il prompt
+    \item Testo dello speaker radio tra una canzone e l'altra
+\end{enumerate}
+
+\paragraph{Esempio output:}
+\textit{Playlist:}
+\begin{enumerate}
+    \item Song A -- Artist X
+    \item Song B -- Artist Y
+    \item Song C -- Artist Z
+\end{enumerate}
+
+\textit{Speaker text:}
+
+``Benvenuti alla nostra selezione musicale serale. Iniziamo con\dots''
+
+\vspace{0.5cm}
+Il sistema restituirà l'output in forma strutturata (JSON/API) per essere integrato nel sistema principale che gestirà:
+\begin{itemize}
+    \item player audio
+    \item generazione della voce dello speaker
+    \item streaming radio
+\end{itemize}
+
+\vspace{0.5cm}
+\hrulefill
+\vspace{0.5cm}
+
+\section*{Ambito del lavoro}
+
+Il lavoro riguarda solo il modulo AI.
+
+\paragraph{Incluso:}
+\begin{itemize}
+    \item interpretazione del prompt utente
+    \item selezione delle canzoni
+    \item generazione della scaletta
+    \item generazione del testo dello speaker
+    \item output strutturato per integrazione backend
+\end{itemize}
+
+\paragraph{Non incluso:}
+\begin{itemize}
+    \item sviluppo frontend
+    \item player audio
+    \item streaming radio
+    \item gestione utenti
+    \item infrastruttura completa dell'app
+\end{itemize}
+
+\vspace{0.5cm}
+\hrulefill
+\vspace{0.5cm}
+
+\section{Opzione 1 -- Prototipo semplice}
+
+\paragraph{Descrizione}
+Versione minima del sistema.
+
+Il prompt viene interpretato da un LLM che estrae informazioni come:
+\begin{itemize}
+    \item genere
+    \item mood
+    \item livello di energia
+\end{itemize}
+
+Queste informazioni vengono utilizzate per interrogare direttamente Spotify Recommendations API.
+
+\paragraph{Pipeline:}
+\begin{center}
+Prompt utente \\
+$\downarrow$ \\
+LLM interpreta il prompt \\
+$\downarrow$ \\
+Conversione in target musicali \\
+$\downarrow$ \\
+Spotify Recommendations API \\
+$\downarrow$ \\
+Selezione playlist \\
+$\downarrow$ \\
+LLM genera testo speaker
+\end{center}
+
+\paragraph{Esempio chiamata Spotify:}
+\begin{verbatim}
+GET /recommendations
+seed_genres=ambient,chill
+target_energy=0.3
+target_tempo=80
+target_valence=0.5
+\end{verbatim}
+
+Spotify restituisce direttamente una lista di brani.
+
+Il sistema utilizza quasi direttamente questi risultati.
+
+\paragraph{Vantaggi}
+\begin{itemize}
+    \item sviluppo molto rapido
+    \item costo basso
+    \item sufficiente per demo o prototipo
+\end{itemize}
+
+\paragraph{Svantaggi}
+\begin{itemize}
+    \item controllo limitato sulla qualità della playlist
+    \item forte dipendenza dagli algoritmi Spotify
+    \item possibili ripetizioni di artista
+\end{itemize}
+
+\vspace{0.3cm}
+\noindent \textbf{Tempo stimato:} 4 -- 7 giorni \\[0.2cm]
+\noindent \textbf{Prezzo stimato:} €400 -- €700
+
+\vspace{0.5cm}
+\hrulefill
+\vspace{0.5cm}
+
+\section{Opzione 2 -- MVP con ranking musicale}
+
+\paragraph{Descrizione}
+Versione più robusta.
+
+Spotify viene utilizzato per trovare candidate songs, ma la selezione finale viene fatta dal sistema AI.
+
+\paragraph{Pipeline:}
+\begin{center}
+Prompt utente \\
+$\downarrow$ \\
+LLM interpreta il prompt \\
+$\downarrow$ \\
+Conversione in caratteristiche musicali target \\
+$\downarrow$ \\
+Spotify Recommendations / Search \\
+$\downarrow$ \\
+Pool di candidate songs \\
+$\downarrow$ \\
+Richiesta audio features delle candidate \\
+$\downarrow$ \\
+Ranking delle canzoni \\
+$\downarrow$ \\
+Playlist finale \\
+$\downarrow$ \\
+LLM genera speaker text
+\end{center}
+
+In questa versione il sistema utilizza le audio features reali delle canzoni (energy, tempo, valence ecc.) per calcolare quanto ogni brano è vicino al prompt.
+
+Il ranking considera:
+\begin{itemize}
+    \item distanza dalle caratteristiche target
+    \item popolarità del brano
+    \item varietà artisti
+    \item coerenza musicale
+\end{itemize}
+
+\paragraph{Vantaggi}
+\begin{itemize}
+    \item playlist più coerenti
+    \item maggiore controllo sulla selezione musicale
+    \item meno ripetizioni
+\end{itemize}
+
+\paragraph{Svantaggi}
+\begin{itemize}
+    \item sviluppo più lungo
+    \item maggiore logica di ranking
+\end{itemize}
+
+\vspace{0.3cm}
+\noindent \textbf{Tempo stimato:} 8 -- 12 giorni \\[0.2cm]
+\noindent \textbf{Prezzo stimato:} €800 -- €1400
+
+\vspace{0.5cm}
+\hrulefill
+\vspace{0.5cm}
+
+\section{Opzione 3 -- Sistema avanzato con playlist planning}
+
+\paragraph{Descrizione}
+Questa versione migliora la qualità della trasmissione radio, non solo della playlist.
+
+Oltre alla selezione delle canzoni, il sistema organizza la sequenza per creare una trasmissione più naturale.
+
+\paragraph{Pipeline:}
+\begin{center}
+Prompt utente \\
+$\downarrow$ \\
+LLM interpreta il prompt \\
+$\downarrow$ \\
+Candidate songs via Spotify \\
+$\downarrow$ \\
+Ranking musicale \\
+$\downarrow$ \\
+Playlist planning \\
+$\downarrow$ \\
+Generazione speaker script
+\end{center}
+
+Il sistema ottimizza:
+\begin{itemize}
+    \item progressione dell'energia
+    \item varietà degli artisti
+    \item alternanza dei generi
+    \item transizioni musicali
+\end{itemize}
+
+\paragraph{Vantaggi}
+\begin{itemize}
+    \item playlist più naturali
+    \item esperienza radio più credibile
+    \item migliore gestione delle transizioni musicali
+\end{itemize}
+
+\vspace{0.3cm}
+\noindent \textbf{Tempo stimato:} 2 -- 3 settimane \\[0.2cm]
+\noindent \textbf{Prezzo stimato:} €1400 -- €2200
+
+\vspace{0.5cm}
+\hrulefill
+\vspace{0.5cm}
+
+\section{Opzione 4 -- Sistema con Semantic Search (Embeddings)}
+
+\paragraph{Descrizione}
+Questa è l'architettura più avanzata.
+
+Il sistema utilizza un catalogo musicale locale con embeddings semantici, che permette di trovare canzoni simili al significato del prompt.
+
+In questo caso non si dipende solo da Spotify per trovare i brani.
+
+\paragraph{Pipeline:}
+\begin{center}
+Prompt utente \\
+$\downarrow$ \\
+Embedding del prompt \\
+$\downarrow$ \\
+Ricerca semantica nel catalogo musicale \\
+$\downarrow$ \\
+Candidate songs semanticamente simili \\
+$\downarrow$ \\
+Ranking con audio features \\
+$\downarrow$ \\
+Playlist finale \\
+$\downarrow$ \\
+LLM genera speaker script
+\end{center}
+
+Il catalogo contiene per ogni canzone:
+\begin{itemize}
+    \item titolo
+    \item artista
+    \item generi
+    \item anno
+    \item audio features
+    \item descrizione testuale
+    \item embedding vettoriale
+\end{itemize}
+
+La ricerca avviene tramite vector database.
+
+Questo permette di interpretare meglio prompt complessi, ad esempio:
+
+``musica per guidare di notte sotto la pioggia''
+
+\paragraph{Vantaggi}
+\begin{itemize}
+    \item maggiore comprensione semantica del prompt
+    \item maggiore controllo sul catalogo musicale
+    \item risultati più creativi e vari
+\end{itemize}
+
+\paragraph{Svantaggi}
+\begin{itemize}
+    \item sviluppo molto più complesso
+    \item necessità di costruire un catalogo musicale locale
+    \item maggiore lavoro di manutenzione dati
+\end{itemize}
+
+\vspace{0.3cm}
+\noindent \textbf{Tempo stimato:} 3 -- 5 settimane \\[0.2cm]
+\noindent \textbf{Prezzo stimato:} €2000 -- €3500
+
+\end{document}
