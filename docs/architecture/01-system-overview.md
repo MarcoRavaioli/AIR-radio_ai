@@ -13,7 +13,7 @@ The system is divided into three primary functional layers:
 This layer handles the initial interaction where the user defines the show's parameters.
 
 - **Prompt Definition**: Captures natural language instructions regarding themes and moods.
-- **Music Preferences**: Integration points for Spotify or Apple Music playlists.
+- **Music Preferences**: Sincronizzazione dei metadati delle playlist utente da Spotify o Apple Music (titoli, artisti).
 - **Voice Configuration**: Selection of AI speaker timbres and styles.
 
 ### 2.2 AI Pipeline Layer

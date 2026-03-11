@@ -31,12 +31,12 @@ Il `docker-compose.yml` avvierà di base:
 
 ### Branching Strategy (Git Flow)
 
-Utilizziamo una variante snella di GitFlow.
+Utilizziamo un workflow basato su `main` e `feature branches`.
 
-- `main`: Codice di produzione, stabile, taggato.
-- `develop`: Ramo di integrazione principale per l'MVP corrente.
-- `feature/[nome-feature]`: Rami per sviluppare singole funzionalità (es. `feature/spotify-auth`, `feature/rag-pipeline`). Staccati da `develop`.
-- `bugfix/[nome-bug]`: Per fix rapidi su `develop`.
+- **`main`**: Codice di produzione, stabile, protetto. Ogni rilascio viene taggato.
+- **`feature/[nome-task]`**: Rami per lo sviluppo di nuove funzionalità (es: `feature/auth-spotify`). Partono sempre da `main`.
+- **`bugfix/[nome-bug]`**: Per la risoluzione di problemi riscontrati. Partono da `main`.
+- **`hotfix/[nome-emergenza]`**: Per correzioni critiche immediate direttamente su `main`.
 
 ### Commit Guidelines
 
