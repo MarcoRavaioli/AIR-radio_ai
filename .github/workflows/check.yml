@@ -1,0 +1,99 @@
+name: AIR CI/CD Check
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Job to check which parts of the monorepo changed
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      api-gateway: ${{ steps.filter.outputs.api-gateway }}
+      ai-engine: ${{ steps.filter.outputs.ai-engine }}
+      mobile: ${{ steps.filter.outputs.mobile }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            api-gateway:
+              - 'apps/api-gateway/**'
+            ai-engine:
+              - 'apps/ai-engine/**'
+            mobile:
+              - 'apps/mobile/**'
+
+  # Node.js / NestJS Backend Checks
+  api-gateway-check:
+    needs: changes
+    if: ${{ needs.changes.outputs.api-gateway == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/api-gateway/package-lock.json
+      - run: npm ci
+        working-directory: apps/api-gateway
+      - run: npm run lint
+        working-directory: apps/api-gateway
+        continue-on-error: true # Temporaneamente attivo finché non ci sono file
+      - run: npm test
+        working-directory: apps/api-gateway
+        continue-on-error: true # Temporaneamente attivo finché non ci sono file
+
+  # Python / FastAPI AI Engine Checks
+  ai-engine-check:
+    needs: changes
+    if: ${{ needs.changes.outputs.ai-engine == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        working-directory: apps/ai-engine
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        working-directory: apps/ai-engine
+      - name: Test with pytest
+        run: |
+          pip install pytest
+          pytest
+        working-directory: apps/ai-engine
+        continue-on-error: true # Temporaneamente attivo finché non ci sono file
+
+  # React Native / TypeScript Mobile Checks
+  mobile-check:
+    needs: changes
+    if: ${{ needs.changes.outputs.mobile == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # RN standard
+          cache: 'npm'
+          cache-dependency-path: apps/mobile/package-lock.json
+      - run: npm ci
+        working-directory: apps/mobile
+      - run: npm run lint
+        working-directory: apps/mobile
+        continue-on-error: true
+      - run: npm test
+        working-directory: apps/mobile
+        continue-on-error: true
