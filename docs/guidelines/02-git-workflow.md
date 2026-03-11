@@ -1,57 +1,72 @@
-# Git Workflow e Linee Guida per Collaboratori
+# Git Workflow Professionale (AIR Repository)
 
-Questo repository utilizza Git per mantenere la cronologia e organizzare il lavoro simultaneo su microservizi diversi (Backend, AI, Frontend).
+Questo documento definisce il workflow ufficiale per lo sviluppo del progetto AIR. L'obiettivo è mantenere la stabilità del `main` e garantire che ogni modifica sia tracciata, revisionata e verificata.
 
 ## 1. Architettura dei Branch
 
-- `main` (o `master`): Il codice in produzione, sempre stabile e funzionante. Mai committare direttamente qui.
-- `develop`: Il ramo centrale di integrazione delle nuove funzionalità. Da qui si staccano i branch di lavoro.
-- `feature/[nome-feature]`: Branch per sviluppare novità. Esempio: `feature/auth-spotify`, `feature/llm-prompt-parser`.
-- `bugfix/[nome-bug]`: Branch per risolvere problemi. Esempio: `bugfix/fix-audio-latency`.
+- **`main`**: Il ramo principale e protetto. Contiene sempre codice stabile, testato e pronto per la produzione. **Mai committare direttamente su `main`.**
+- **`feature/[nome-task]`**: Per lo sviluppo di nuove funzionalità (es: `feature/auth-spotify`).
+- **`bugfix/[nome-bug]`**: Per la risoluzione di problemi (es: `bugfix/fix-audio-sync`).
+- **`hotfix/[nome-emergenza]`**: Per correzioni critiche immediate direttamente da applicare su `main`.
 
-*Nota:* Attualmente esiste un branch locale `develop/api-gateway`. Se state usando uno schema `[rama]/[progetto]`, va bene, ma si consiglia un prefisso esplicito (es: `feature/api-gateway`).
+---
 
-## 2. Flusso di Lavoro (Il "Git Flow")
+## 2. Il Ciclo di Sviluppo (Step-by-Step)
 
-Quando inizio a lavorare su una nuova modifica, seguo questo flusso:
+Seguire rigorosamente questi passaggi per ogni modifica:
 
-1. **Sincronizzo il repo locale**:
-   ```bash
-   git checkout develop
-   git pull origin develop
-   ```
-2. **Creo il mio branch**:
-   ```bash
-   git checkout -b feature/la-mia-nuova-feature
-   ```
-3. **Sviluppo e faccio commit**:
-   Mentre scrivo codice, faccio commit piccoli e chiari, seguendo la convenzione Conventional Commits:
-   - `feat:` per nuove implementazioni.
-   - `fix:` per bug.
-   - `docs:` per modifiche ai `.md`.
-   - `refactor:` codice migliorato senza aggiungere feature.
-   
-   ```bash
-   git add .
-   git commit -m "feat(ai): aggiunto parsing del mood dal prompt"
-   ```
-4. **Push e Pull Request (PR)**:
-   ```bash
-   git push origin feature/la-mia-nuova-feature
-   ```
-   * Su GitHub apro una "Pull Request" verso `develop`.
-   * Chiedo a Marco o Giuseppe di fare una rapida Review.
-   * Una volta approvata, la PR viene mergiata in `develop`. E posso cancellare il mio branch in remoto.
+### 1. Pianificazione
+Ogni attività deve nascere da una **Issue su GitHub**.
+- Descrive il problema o la funzionalità.
+- Serve come riferimento per la Pull Request.
 
-## 3. Gestire i Conflitti (Merge Conflict)
+### 2. Sviluppo Locale
+Crea un branch dedicato partendo dall'ultimo stato di `main`:
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/nome-della-tua-feature
+```
+Fai commit piccoli, frequenti e con messaggi chiari (usando [Conventional Commits](https://www.conventionalcommits.org/)):
+- `feat:` nuove feature.
+- `fix:` correzione bug.
+- `docs:` modifiche documentazione.
+- `refactor:` miglioramento del codice esistente.
 
-Se due persone hanno modificato lo stesso file:
-1. Mentre sono sul mio branch, recupero i file aggiornati: `git pull origin develop`.
-2. Git mi avviserà che c'è un conflitto.
-3. Apro Visual Studio Code: i file in conflitto avranno blocchi `<<<<<<< HEAD` (le mie modifiche) e `>>>>>>> develop` (le loro modifiche).
-4. Scelgo quale tenere o le unisco.
-5. Salvo, poi lancio `git add .` e `git commit -m "fix: risolto merge conflict"`.
+### 3. Proposta (Pull Request)
+Quando il lavoro è pronto, fai il push su GitHub e apri una **Pull Request (PR)** verso `main`:
+```bash
+git push origin feature/nome-della-tua-feature
+```
+Nella PR:
+- Collega la Issue (es: "Closes #12").
+- Aggiungi i **Reviewers** obbligatori.
 
-## 4. Evitare gli errori comuni
-- **Mai pushare dati sensibili**: Le chiavi API vanno nel file `.env`, e il file `.env` deve essere elencato dentro `.gitignore`. Usare `.env.example` per far capire ai colleghi quali chiavi servono senza esporne il valore.
-- **Commit frequenti**: Non scrivere mille righe e fare un solo commit. Committa per blocchi logici per facilitare i rollback in caso di errore.
+### 4. Revisione (Code Review)
+Il team (o l'agente AI incaricato) revisiona il codice:
+- Approva se tutto è corretto.
+- Richiede modifiche se necessario. Lo sviluppatore aggiorna il codice sul branch e fa nuovamente push.
+
+### 5. Merge
+Una volta ottenuta l'approvazione e verificato che i test (se presenti) passino:
+- Si esegue il merge della PR su GitHub.
+- Si consiglia il metodo "Squash and Merge" per mantenere pulita la cronologia di `main`.
+
+### 6. Pulizia
+Dopo il merge:
+- Elimina il branch remoto tramite GitHub (pulsante "Delete branch").
+- Aggiorna il repository locale ed elimina il branch locale:
+```bash
+git checkout main
+git pull origin main
+git branch -d feature/nome-della-tua-feature
+```
+
+---
+
+## 3. Regole d'Oro per Agenti AI e Umani
+
+1. **Non rompere il Main**: Prima di aprire una PR, verifica che il codice compili e non introduca regressioni.
+2. **Sincronizzazione continua**: Se lavori su un branch per più giorni, aggiornalo regolarmente con `git merge main` (o `git rebase main`) per evitare conflitti giganti alla fine.
+3. **No dati sensibili**: Mai includere file `.env`, chiavi API o password nel repository. Usa sempre `.gitignore`.
+4. **Trasparenza**: Commenta le tue scelte tecniche nella descrizione della Pull Request.
