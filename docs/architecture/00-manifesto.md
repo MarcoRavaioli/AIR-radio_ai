@@ -12,7 +12,7 @@ Radio-AI bridges these gaps by creating a personalized radio experience. It is n
 ## Core Pillars
 
 ### 1. The "Smart Remote" Architecture
-Radio-AI does not distribute copyrighted music. Instead, it acts as an intelligent orchestration layer. [cite_start]It controls the user's existing premium accounts (Spotify/Apple Music) to play music locally while seamlessly injecting AI-generated audio chunks (TTS) from our servers[cite: 144, 239]. This ensures legal compliance and leverages high-quality native audio.
+Radio-AI does not distribute copyrighted music. Instead, it acts as an intelligent orchestration layer. [cite_start]It controls the user's existing premium accounts (Spotify/Apple Music) to play music locally while seamlessly injecting AI-generated audio chunks (TTS) from our servers[cite: 144, 239]. **Nota Bene**: Spotify fungerà da puro riproduttore multimediale; la selezione musicale "intelligente" e le transizioni emotive sono gestite internamente dai nostri algoritmi proprietari (AI Engine) per superare le limitazioni delle API esterne.
 
 ### 2. Verified Storytelling (Truth in AI)
 A core differentiator is the reliability of the narrative. Unlike standard LLM wrappers that may hallucinate, Radio-AI implements a strict **Fact-Checking Engine**.

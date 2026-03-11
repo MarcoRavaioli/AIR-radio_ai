@@ -40,7 +40,7 @@ Radio-AI utilizes a hybrid API architecture. External communication between the 
 ## 4. Third-Party Integrations
 
 ### 4.1 Music Providers
-* **Spotify Web API / Apple Music API**: Used for playlist metadata retrieval and playback control via native SDKs.
+* **Spotify Web API / Apple Music API**: Utilizzate per il recupero dei metadati delle playlist e il controllo della riproduzione tramite SDK nativi. L'analisi "umorale" e le raccomandazioni sono gestite internamente dall'AI Engine.
 * **OAuth 2.0**: The standard for managing secure external authorizations.
 
 ### 4.2 AI and Infrastructure
