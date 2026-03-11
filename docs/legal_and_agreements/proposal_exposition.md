@@ -49,3 +49,13 @@ Ranking: Filtraggio dei brani basato sulle audio features reali (non solo sui ge
 Fact-Checking: Recupero di 1-2 aneddoti reali sugli artisti selezionati.
 
 Output (Deliverable): Un payload JSON strutturato a "Chunk" (es. type: "speech" | "music", con i rispettivi ID di Spotify e i testi validati), pronto per essere iniettato nel nostro orchestratore audio.
+
+
+
+
+
+
+
+domande per GA:
+
+1. se noi iniziassimo con il l'opzione 2 per l'MVP, poi se per la versione definitiva voelssimo usare un'altra opzione, i prezzi si sommano o si intersecano?
