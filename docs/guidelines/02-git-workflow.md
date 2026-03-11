@@ -2,6 +2,8 @@
 
 Questo documento definisce il workflow ufficiale per lo sviluppo del progetto AIR. L'obiettivo è mantenere la stabilità del `main` e garantire che ogni modifica sia tracciata, revisionata e verificata.
 
+*Per una panoramica rapida su come iniziare a contribuire, consulta il file [CONTRIBUTING.md](../../CONTRIBUTING.md) nella root del repository.*
+
 ## 1. Architettura dei Branch
 
 - **`main`**: Il ramo principale e protetto. Contiene sempre codice stabile, testato e pronto per la produzione. **Mai committare direttamente su `main`.**

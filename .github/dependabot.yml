@@ -1,0 +1,28 @@
+version: 2
+updates:
+  # Aggiornamenti per API Gateway (Node.js)
+  - package-ecosystem: "npm"
+    directory: "/apps/api-gateway"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Aggiornamenti per Mobile (React Native / Node.js)
+  - package-ecosystem: "npm"
+    directory: "/apps/mobile"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Aggiornamenti per AI Engine (Python)
+  - package-ecosystem: "pip"
+    directory: "/apps/ai-engine"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Aggiornamenti per GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
